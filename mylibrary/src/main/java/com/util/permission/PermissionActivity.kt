@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import java.util.ArrayList
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class PermissionActivity : Activity() {
     private val denyPerimissions = ArrayList<String>()
     private val rationPerimissions = ArrayList<String>()
@@ -18,6 +19,7 @@ class PermissionActivity : Activity() {
         Log.d("PermissionActivity", "onCreate: ")
         checkPermission()
     }
+
     //检查权限
     private fun checkPermission() {
         Log.d("PermissionActivity", "checkPermission: ")
@@ -42,10 +44,16 @@ class PermissionActivity : Activity() {
                 CALLBACK!!.onPermissionGranted()
                 finish()
             }
+        } else {
+            CALLBACK!!.onPermissionGranted()
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         Log.d("PermissionActivity", "onRequestPermissionsResult1: ")
         if (requestCode != RC_REQUEST_PERMISSION) {
             return
@@ -53,9 +61,14 @@ class PermissionActivity : Activity() {
         val shouldShowRequestPermissionRationale = BooleanArray(permissions.size)
         for (i in permissions.indices) {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M)
-                shouldShowRequestPermissionRationale[i] = shouldShowRequestPermissionRationale(permissions[i])
+                shouldShowRequestPermissionRationale[i] =
+                    shouldShowRequestPermissionRationale(permissions[i])
         }
-        this.onRequestPermissionsResult(permissions, grantResults, shouldShowRequestPermissionRationale)
+        this.onRequestPermissionsResult(
+            permissions,
+            grantResults,
+            shouldShowRequestPermissionRationale
+        )
     }
 
     private fun onRequestPermissionsResult(
